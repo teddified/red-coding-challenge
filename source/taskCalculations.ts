@@ -1,11 +1,12 @@
 import * as fs from 'fs'
 import * as util from 'util'
+import {getDecryptedFile} from './decrypt'
 
 const readFile = util.promisify(fs.readFile)
 const NUMBERS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 export const getResponse = async () => {
-  const data = await readFile('./clear_smaller.txt', 'utf8')
+  const data = await getFileData()
 
   return {
     task2: getSumOfNumberCharsInString(data),
@@ -13,6 +14,11 @@ export const getResponse = async () => {
     task4: getSumOfNumbersPerSentence(data),
     task4a: getBiggestSentenceValuesInText(data)
   }
+}
+
+const getFileData = async () => {
+  return await getDecryptedFile() ??
+    await readFile('./clear_smaller.txt', 'utf8')
 }
 
 const getSumOfNumberCharsInString = (string: string): number =>
